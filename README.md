@@ -1,9 +1,9 @@
 # Group-4
 Members:
 Collin Hand (**leader**) -- aka collinhand
-Shean Johnson -- aka 
-Jordan Nelson -- aka 
-Andrew Hoemke -- aka
+Shean Johnson -- aka AtlasCrusher7
+Jordan Nelson -- aka Wisp19
+Andrew Hoemke -- aka AndrewHoemke
 
 
 _**About the project:**_
