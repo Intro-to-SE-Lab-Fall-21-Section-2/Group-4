@@ -12,7 +12,7 @@ This is a web-based email client. Some functions it will include (all of which a
   - View emails
   - Forward an email
   - Compose an email
-  - Edit an email
+  - Edit an email.
   - Attatch a file to an email
   - Send an email
 
