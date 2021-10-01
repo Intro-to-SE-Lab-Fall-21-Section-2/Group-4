@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <title> Inbox </title>
+
+  <h1>Welcome to your {{session["inboxView"]}}, {{session["email"]}}!</h1>
+  <h3>You have {{session["totMessages"]}} emails.<br>
+      <a href="/showSent">View Sent Mail.<a> <a href="/showInbox">View Inbox</a><br>
+      <a href="/compose">Compose a new email.</a></h3>
+
+      <form action = "/search" method = "post">
+        <p><input type="text" name="searchTerm" />
+        <input type="submit" value="Search" /></p>
+      </form>
+
+  {% for row in email %}
+    <p><b>Subject: {{row[0]}}</b><br>
+    <i>From: {{row[1]}}</i><br>
+    <a href="/email/{{row[2]}}">View full email</a><br>
+    <a>Reply</a><br>
+    <a>Delete</a>
+    </p>
+    <div style="height:10px;width:100%;background-color:green;padding-top:10px"></div>
+  {% endfor %}
+
+  <a href = "/showmore">Show More</a> <a href = "/showless">Show Less</a> <a href="/logout"><b>Log Out</b></a>
+</html>
