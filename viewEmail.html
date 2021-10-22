@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <title> Inbox </title>
+
+  <style>
+  input[type=text], select, textarea {
+    width: 100%; /* Full width */
+    padding: 12px; /* Some padding */
+    border: 1px solid #ccc; /* Gray border */
+    border-radius: 4px; /* Rounded borders */
+    box-sizing: border-box; /* Make sure that padding and width stays in place */
+    margin-top: 6px; /* Add a top margin */
+    margin-bottom: 16px; /* Bottom margin */
+    resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
+  }
+
+  /* Style the submit button with a specific background color etc */
+  input[type=submit] {
+    background-color: #04AA6D;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  /* When moving the mouse over the submit button, add a darker green color */
+  input[type=submit]:hover {
+    background-color: #45a049;
+  }
+
+  /* Add a background color and some padding around the form */
+  .container0 {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
+  .container1 {
+    border-radius: 5px;
+    background-color: #cccccc;
+    padding: 20px;
+  }
+  </style>
+  <div style="background-color:powderblue;border-style:solid">
+    <div style = "padding-left:25px;padding-top:25px">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <span class=flashes>
+          <em>
+          {% for message in messages %}
+            {{ message | safe}}
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+        </em>
+          </span>
+      <form action="/inbox">
+        <input type="submit" value="< Back to Inbox" />
+      </form>
+
+      {% for row in email %}
+        <p><b>Subject:</b> {{row[0]}}<br>
+        <b>From:</b> {{row[1]}}</i><br>
+        <b>To:</b> {{row[4]}}</i><br>
+        <b>Date:</b> {{row[3]}}</i><br>
+
+        <form action="/compose/{{row[6]}}" style="display:inline">
+          <input type="submit" value="Reply" />
+        </form>
+        <form action="/delete/{{row[6]}}" style="display:inline">
+          <input type="submit" value="Delete" />
+        </form>
+
+        <form action="/forward/{{row[6]}}" method = "post" style="display:inline">
+          <input type="text" name="forwardEmail"  placeholder="Email to foward to" style="width:500px"/>
+          <input type="submit" value="Foward"/>
+        </form>
+
+
+      {% if row[7] %}
+      <br><br><b>Attachments</b> | <a href = "/downloadAttachments/{{row[6]}}">Click here to download all.</a>
+        <ul>
+        {% for item in row[7] %}
+          <li>{{item}}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+      </p>
+    </div>
+  </div>
+  <br><br><br>
+
+    {{row[5] | safe}}
+
+
+  {% endfor %}
+</html>

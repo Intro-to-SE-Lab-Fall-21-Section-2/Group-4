@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Inbox </title>
+
+    <style>
+    input[type=text], select, textarea {
+      width: 100%; /* Full width */
+      padding: 12px; /* Some padding */
+      border: 1px solid #ccc; /* Gray border */
+      border-radius: 4px; /* Rounded borders */
+      box-sizing: border-box; /* Make sure that padding and width stays in place */
+      margin-top: 6px; /* Add a top margin */
+      margin-bottom: 16px; /* Bottom margin */
+      resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
+    }
+
+    /* Style the submit button with a specific background color etc */
+    input[type=submit] {
+      background-color: #04AA6D;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* When moving the mouse over the submit button, add a darker green color */
+    input[type=submit]:hover {
+      background-color: #45a049;
+    }
+
+    /* Add a background color and some padding around the form */
+    .container0 {
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+    .container1 {
+      border-radius: 5px;
+      background-color: #cccccc;
+      padding: 20px;
+    }
+    </style>
+
+  </head>
+  <div style="background-color:powderblue;border-style:solid">
+    <div style = "padding-left:25px;padding-top:25px">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <span class=flashes>
+            <em>
+          {% for message in messages %}
+            {{ message | safe}}
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </em>
+          </span>
+
+      <h1>Welcome to your inbox!</h1>
+      <h3><i>You're logged in as {{session["email"]}}</i><br>
+
+
+      <form action = "/search" method = "post" style="display:inline">
+        <p><input type="text" name="searchTerm" placeholder="Search by subject" style="width:500px"/>
+        <input type="submit" value="Search" />
+      </form>
+      {% if "searchTerm" in session %}
+      <form action="/clearsearch" style="display:inline">
+        <input type="submit" value="Clear Search" />
+      </form>
+      <br><br>
+      {% endif %}
+
+      <form action="/compose" style="display:inline">
+        <input type="submit" value="Compose a New E-Mail" />
+      </form>
+    </div>
+  </div>
+
+    {% for row in email %}
+      <div class="container0" style="border-style: dashed; border-color:gray;">
+        <b>Subject:</b> {{row[0]}}<br>
+        <b>From:</b> {{row[1]}}<br>
+        <b>Date:</b> {{row[2]}}<br>
+        {% if row[4] > 0 %} <i> {{row[4]}} Attatchment(s)</i><br> {% endif %}
+        <form action="/viewEmail/{{row[3]}}" style="display:inline">
+          <input type="submit" value="Open E-Mail" />
+        </form>
+        <form action="/delete/{{row[3]}}" style="display:inline">
+          <input type="submit" value="Delete Email" />
+        </form>
+      </div>
+  {% endfor %}
+
+  <div style="height:22px;background-color:powderblue;padding-left:25px;border-style:solid">
+    Showing {{session["displayNum"]}} E-Mails.
+    <a href = "/showmore">Show More</a>
+    <a href = "/showless">Show Less</a>
+    <a href="/logout"><b>Log Out</b></a><br>
+  </div>
+</html>
