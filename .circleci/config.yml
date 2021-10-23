@@ -36,6 +36,10 @@ jobs:
             . venv/bin/activate
             pip3 install flask
             pip3 install flask_bootstrap
+            pip3 install flask_wtf 
+            pip3 install wtforms 
+            pip3 install email
+            pip3 install imap_tools 
             pip install -r requirements.txt
       - save_cache:
           key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
