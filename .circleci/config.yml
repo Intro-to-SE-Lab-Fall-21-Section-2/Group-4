@@ -10,7 +10,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install Flask
+            sudo pip install Flask
             python3 auth.py
   test:
     docker:
@@ -22,7 +22,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install Flask
+            sudo pip install Flask
             python3 test.py
       - store_artifacts:
           path: test-reports/
