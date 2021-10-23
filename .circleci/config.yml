@@ -1,13 +1,14 @@
 version: 2
-  jobs:
-    auth:
-      docker:
+jobs:
+  auth:
+    docker:
       - image: circleci/python:3.6
     steps:
       - checkout
       - run:
           name: Running auth
           command: |
+            python3 -m venv venv
             python3 auth.py
   test:
     docker:
@@ -17,8 +18,8 @@ version: 2
       - run:
           name: running test
           command: |
-
-            py -3 test.py
+            python3 -m venv venv
+            python3 test.py
       - store_artifacts:
           path: test-reports/
           destination: sprint3
