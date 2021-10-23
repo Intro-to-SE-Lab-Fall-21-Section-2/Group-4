@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           command: |
-            python3 -m venv venv
+            py -3 -m venv venv
             venv\Scripts\activate
       - run:
           name: Running auth
@@ -24,6 +24,6 @@ jobs:
           destination: sprint3
 workflows:
   version: 2
-  build_and_test:
+  build:
     jobs:
       - build
