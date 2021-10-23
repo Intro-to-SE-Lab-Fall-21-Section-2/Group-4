@@ -22,3 +22,8 @@ jobs:
       - store_artifacts:
           path: test-reports/
           destination: sprint3
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
