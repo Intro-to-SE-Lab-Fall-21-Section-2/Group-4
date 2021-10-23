@@ -8,7 +8,6 @@ jobs:
       - run:
           name: Running auth
           command: |
-            venv\Scripts\activate
             py -3 auth.py
   test:
     docker:
@@ -18,7 +17,6 @@ jobs:
       - run:
           name: running test
           command: |
-            venv\Scripts\activate
             py -3 test.py
       - store_artifacts:
           path: test-reports/
