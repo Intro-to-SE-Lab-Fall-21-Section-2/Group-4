@@ -1,14 +1,14 @@
 version: 2
-jobs:
-  auth:
-    docker:
+  jobs:
+    auth:
+      docker:
       - image: circleci/python:3.6
     steps:
       - checkout
       - run:
           name: Running auth
           command: |
-            py -3 auth.py
+            python3 auth.py
   test:
     docker:
       - image: circleci/python:3.6
@@ -17,6 +17,7 @@ jobs:
       - run:
           name: running test
           command: |
+
             py -3 test.py
       - store_artifacts:
           path: test-reports/
