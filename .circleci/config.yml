@@ -3,26 +3,35 @@ jobs:
   auth:
     docker:
       - image: circleci/python:3.6
+        environment:
+          FLASK_CONFIG: testing
+          TEST_DATABASE_URL: postgresql://ubuntu@localhost/circle_test?sslmode=disable
     steps:
       - checkout
+      - run: mkdir test-reports
       - run:
           name: Running auth
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            sudo pip install Flask
             python3 auth.py
+      - store_artifacts:
+          path: test-reports/
+          destination: sprint3
   test:
     docker:
       - image: circleci/python:3.6
+        environment:
+          FLASK_CONFIG: testing
+          TEST_DATABASE_URL: postgresql://ubuntu@localhost/circle_test?sslmode=disable
     steps:
-      - checkout          
+      - checkout
+      - run: mkdir test-reports          
       - run:
           name: running test
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            sudo pip install Flask
             python3 test.py
       - store_artifacts:
           path: test-reports/
