@@ -34,22 +34,28 @@ def inbox():
     if "email" in session: # if user is logged in
 
         emailContentSend = [] #emailContent = [["test subject", "noone", "index.html"],["test subject 2", "still noone", "index.html"]]
+        availableFolders = []
         emailCount = 0
+        try:
+            if "searchTerm" in session:
+                with MailBox('imap.gmail.com').login(session["email"], session["password"], session["view"]) as mailbox:
+                    for msg in mailbox.fetch(AND(subject = session["searchTerm"]), reverse = session["sortOrder"], limit = session["displayNum"]):
+                        attatchCount = 0
+                        for att in msg.attachments:
+                            attatchCount += 1
+                        emailContentSend.append([msg.subject, msg.from_, msg.date, msg.uid, attatchCount])
+            else:
+                with MailBox('imap.gmail.com').login(session["email"], session["password"], session["view"]) as mailbox:
 
-        if "searchTerm" in session:
-            with MailBox('imap.gmail.com').login(session["email"], session["password"]) as mailbox:
-                for msg in mailbox.fetch(AND(subject = session["searchTerm"]), reverse=True, limit = session["displayNum"]):
-                    attatchCount = 0
-                    for att in msg.attachments:
-                        attatchCount += 1
-                    emailContentSend.append([msg.subject, msg.from_, msg.date, msg.uid, attatchCount])
-        else:
-            with MailBox('imap.gmail.com').login(session["email"], session["password"]) as mailbox:
-                for msg in mailbox.fetch(reverse=True, limit = session["displayNum"]):
-                    attatchCount = 0
-                    for att in msg.attachments:
-                        attatchCount += 1
-                    emailContentSend.append([msg.subject, msg.from_, msg.date, msg.uid, attatchCount])
+                    for msg in mailbox.fetch(reverse = session["sortOrder"], limit = session["displayNum"]):
+                        attatchCount = 0
+                        for att in msg.attachments:
+                            attatchCount += 1
+                        emailContentSend.append([msg.subject, msg.from_, msg.date, msg.uid, attatchCount])
+        except:
+            session.clear()
+            flash("Invalid email and password combination. Try again.<br><br>")
+            return redirect(url_for("login"))
 
         # close the connection and logout
         return render_template("inbox.html", email=emailContentSend)
@@ -103,6 +109,9 @@ def login():
         session["email"] = request.form["email"]
         session["password"] = request.form["password"]
         session["displayNum"] = 6
+        session["sortOrder"] = True
+        session["view"] = "INBOX"
+        session["viewFormatted"] = "Inbox"
         return redirect(url_for("inbox"))
     else:
         if "email" in session:
@@ -114,6 +123,31 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
+@app.route("/showInbox")
+def showInbox():
+    session["view"] = "INBOX"
+    session["viewFormatted"] = "Inbox"
+    return redirect(url_for("inbox"))
+
+@app.route("/showSent")
+def showSent():
+    session["view"] = "[Gmail]/Sent Mail"
+    session["viewFormatted"] = "Sent"
+    return redirect(url_for("inbox"))
+
+@app.route("/showAll")
+def showAll():
+    session["view"] = "[Gmail]/All Mail"
+    session["viewFormatted"] = "All Mail"
+    return redirect(url_for("inbox"))
+
+@app.route("/showSpam")
+def showSpam():
+    session["view"] = "[Gmail]/Spam"
+    session["viewFormatted"] = "Spam"
+    return redirect(url_for("inbox"))
+
 
 @app.route("/search", methods=["POST","GET"])
 def search():
@@ -199,17 +233,22 @@ def compose(emailUid = -1):
             # Add attachment to message and convert message to string
             message.attach(part)
             text = message.as_string()
+        try:
+            # we'll connect using SSL
+            context = ssl.create_default_context()
+            server = smtplib.SMTP_SSL(smtp_ssl_host, smtp_ssl_port, context=context)
 
-        # we'll connect using SSL
-        context = ssl.create_default_context()
-        server = smtplib.SMTP_SSL(smtp_ssl_host, smtp_ssl_port, context=context)
-
-        # to interact with the server, first we log in
-        # and then we send the message
-        server.login(session["email"], session["password"])
-        server.sendmail(session["email"], request.form["to"], message.as_string())
-        server.quit()
-
+            # to interact with the server, first we log in
+            # and then we send the message
+            server.login(session["email"], session["password"])
+            server.sendmail(session["email"], request.form["to"], message.as_string())
+            server.quit()
+        except:
+            flash("Please enter a valid email.")
+            if emailUid != -1:
+                return redirect(url_for("compose", emailUid = emailUid))
+            else:
+                return redirect(url_for("compose"))
         return redirect(url_for("inbox"))
     else: # if form has not been yet submitted // initial loading
         if (emailUid == -1):
@@ -217,7 +256,7 @@ def compose(emailUid = -1):
         else:
             with MailBox('imap.gmail.com').login(session["email"], session["password"]) as mailbox:
                 for msg in mailbox.fetch(AND(uid=emailUid)):
-                    emailContentSend = ["RE" + msg.subject, msg.from_]
+                    emailContentSend = ["RE: " + msg.subject, msg.from_]
 
         return render_template("compose.html",email=emailContentSend)
 
@@ -255,3 +294,11 @@ def forward(emailUid):
         return redirect(url_for("viewEmail", emailUid = emailUid))
     else: # if form has not been yet submitted
         return redirect(url_for("login"))
+
+@app.route("/swapOrder")
+def swapOrder():
+    if session["sortOrder"]:
+        session["sortOrder"] = False
+    else:
+        session["sortOrder"] = True
+    return redirect(url_for("inbox"))

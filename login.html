@@ -105,6 +105,19 @@
   <body>
     <h2>Login Page</h2><br>
     <div class="login">
+      
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <span class=flashes>
+            <em>
+          {% for message in messages %}
+            {{ message | safe}}
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </em>
+        </span>
+
     <form action="#" method="post">
       <input type="text" name="email" placeholder="username@gmail.com" size="50"/> <br><br>
       <input type="password" name="password" placeholder="password" size="50"/> <br><br>
