@@ -40,9 +40,10 @@ jobs:
             pip3 install wtforms 
             pip3 install gcloud
             pip3 install imap_tools 
+            pip3 install pytest
             pip install -r requirements.txt
             mkdir test-reports
-            python3 -m pytest --junitxml=test-results/junit.xml
+            pytest --junitxml=test-results/junit.xml
       - save_cache:
           key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
           paths:
