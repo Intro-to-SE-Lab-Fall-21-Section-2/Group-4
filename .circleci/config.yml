@@ -42,7 +42,7 @@ jobs:
             pip3 install imap_tools 
             pip3 install pytest
             pip install -r requirements.txt
-            mkdir test-reports
+            mkdir test-reports/
             pytest --junitxml=test-results/junit.xml
       - save_cache:
           key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
@@ -53,7 +53,7 @@ jobs:
             . venv/bin/activate
             python3 test.py test
       - store_artifacts:
-          path: test-reports
+          path: test-reports/
           destination: tr1
       - store_test_results:
-          path: test-reports
+          path: test-reports/
