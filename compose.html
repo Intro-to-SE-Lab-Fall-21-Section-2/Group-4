@@ -46,12 +46,27 @@
         <form action="/inbox" style="display:inline">
           <input type="submit" value="Abandon Draft and Return to Inbox" />
         </form>
+
+        <br><br>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <span class=flashes>
+              <em>
+            {% for message in messages %}
+              {{ message | safe}}
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </em>
+          </span>
+
       </div>
     </div>
     <div class="container">
       <form action = "#" method = "post" enctype="multipart/form-data">
-        <p><b>To:</b> <input type="text" name="to" value="{{email[1]}}"/></p>
-        <p><b>Subject:</b> <input type="text" name="subject" value="{{email[0]}}"/></p>
+        <p><b>To:</b> <input type="text" name="to" value="{{email[1]}}" placeholder = "email@domain.com"/></p>
+        <p><b>Subject:</b> <input type="text" name="subject" value="{{email[0]}}" placeholder="Subject"/></p>
         <input type="file" name="attachment"/>
         <p><textarea name="body" cols="50" rows="10"></textarea></p>
         <p><input type="submit" value="Send Email" /></p>

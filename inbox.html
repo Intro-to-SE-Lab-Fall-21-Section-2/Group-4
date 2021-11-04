@@ -58,8 +58,8 @@
     </em>
           </span>
 
-      <h1>Welcome to your inbox!</h1>
-      <h3><i>You're logged in as {{session["email"]}}</i><br>
+      <h1>Welcome to your Email!</h1>
+      <h3><i>You're logged in as {{session["email"]}}. Currently viewing: {{session["viewFormatted"]}}</i><br>
 
 
       <form action = "/search" method = "post" style="display:inline">
@@ -95,9 +95,34 @@
   {% endfor %}
 
   <div style="height:22px;background-color:powderblue;padding-left:25px;border-style:solid">
-    Showing {{session["displayNum"]}} E-Mails.
+    Showing {{session["displayNum"]}} E-Mails in: {{session["viewFormatted"]}}.
     <a href = "/showmore">Show More</a>
     <a href = "/showless">Show Less</a>
-    <a href="/logout"><b>Log Out</b></a><br>
+    <a href = "/swapOrder">Sort by   {% if session["sortOrder"] %} Oldest First {% endif %} {% if session["sortOrder"] == False%} Newest First {% endif %} </a>
+    <a href="/logout"><b>Log Out</b></a><br><br>
+  </div>
+  <div style="background-color:lightblue;padding-left:25px;border-style:solid">
+    Change view to:
+
+    {% if session["viewFormatted"] != "Inbox" %}
+    <form action="/showInbox" style="display:inline">
+      <input type="submit" value="Inbox" />
+    </form>
+    {% endif %}
+    {% if session["viewFormatted"] != "Sent" %}
+    <form action="/showSent" style="display:inline">
+      <input type="submit" value="Sent Mail" />
+    </form>
+    {% endif %}
+    {% if session["viewFormatted"] != "All Mail" %}
+    <form action="/showAll" style="display:inline">
+      <input type="submit" value="All Mail" />
+    </form>
+    {% endif %}
+    {% if session["viewFormatted"] != "Spam" %}
+    <form action="/showSpam" style="display:inline">
+      <input type="submit" value="Spam" />
+    </form>
+    {% endif %}
   </div>
 </html>
