@@ -46,10 +46,11 @@ jobs:
           paths:
             - "venv"
       - run:
+          name: Run tests
           command: |
             . venv/bin/activate
             mkdir test-results
-            pytest test.py
+            pytest test.py=test-results
       - store_artifacts:
           path: test-results
       - store_test_results:
