@@ -49,7 +49,7 @@ jobs:
           command: |
             . venv/bin/activate
             mkdir test-results
-            pytest test.py --junitxml=test-results/junit.xml
+            pytest --junitxml=test-results/junit.xml
       - store_artifacts:
           path: test-results
       - store_test_results:
