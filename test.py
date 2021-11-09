@@ -12,19 +12,6 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 
-import pytest
-from _pytest import nodes
-from _pytest import timing
-from _pytest._code.code import ExceptionRepr
-from _pytest._code.code import ReprFileLocation
-from _pytest.config import Config
-from _pytest.config import filename_arg
-from _pytest.config.argparsing import Parser
-from _pytest.fixtures import FixtureRequest
-from _pytest.reports import TestReport
-from _pytest.store import StoreKey
-from _pytest.terminal import TerminalReporter
-
 import imaplib
 import email
 from email.header import decode_header
