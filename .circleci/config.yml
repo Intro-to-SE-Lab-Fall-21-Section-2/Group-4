@@ -46,11 +46,10 @@ jobs:
           paths:
             - "venv"
       - run:
-          name: Run tests
           command: |
             . venv/bin/activate
             mkdir test-results
-            python3 -m pytest test.py
+            pytest test.py --junitxml=test-results/junit.xml
       - store_artifacts:
           path: test-results
       - store_test_results:
