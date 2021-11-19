@@ -71,7 +71,7 @@ jobs:
       - run:
           command: |
             . venv/bin/activate
-            pytest test.py
+            pytest test.py test
       - store_artifacts:
           path: test-reports/
           destination: tr1
