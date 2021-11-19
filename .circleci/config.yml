@@ -61,7 +61,9 @@ jobs:
             pip3 install wtforms 
             pip3 install gcloud
             pip3 install imap_tools
+            pip3 install pytest
             pip install -r requirements.txt
+            pip install -r _pytest.junitxml
       - save_cache:
           key: deps2-{{ checksum "requirements.txt" }}
           paths:
@@ -69,7 +71,7 @@ jobs:
       - run:
           command: |
             . venv/bin/activate
-            python test.py test
+            pytest test.py
       - store_artifacts:
           path: test-reports/
           destination: tr1
