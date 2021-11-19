@@ -39,6 +39,7 @@ jobs:
     steps:
       - checkout
       - run: mkdir test-reports
+      - run: pip3 freeze > requirements.txt
       - run:
           name: Download Selenium
           command: |
