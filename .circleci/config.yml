@@ -61,7 +61,7 @@ jobs:
             pip3 install wtforms 
             pip3 install gcloud
             pip3 install imap_tools
-            pip3 install pytest
+            pip install pytest
             pip install -r requirements.txt
             pip install -r _pytest.junitxml
       - save_cache:
